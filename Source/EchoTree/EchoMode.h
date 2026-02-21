@@ -26,7 +26,7 @@ struct FEchoSnapshot
 
 UCLASS()
 
-class JAMTESTINGPROJECT_API UEchoMode : public UBlueprintFunctionLibrary
+class UEchoMode : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
