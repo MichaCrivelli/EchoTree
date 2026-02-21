@@ -35,17 +35,6 @@ AEchoTreeCharacter::AEchoTreeCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
 
-	// Create a camera boom (pulls in towards the player if there is a collision)
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f;
-	CameraBoom->bUsePawnControlRotation = true;
-
-	// Create a follow camera
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	FollowCamera->bUsePawnControlRotation = false;
-
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -61,10 +50,10 @@ void AEchoTreeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AEchoTreeCharacter::Move);
-		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &AEchoTreeCharacter::Look);
+		//EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &AEchoTreeCharacter::Look);
 
 		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AEchoTreeCharacter::Look);
+		//EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AEchoTreeCharacter::Look);
 	}
 	else
 	{
@@ -81,14 +70,14 @@ void AEchoTreeCharacter::Move(const FInputActionValue& Value)
 	DoMove(MovementVector.X, MovementVector.Y);
 }
 
-void AEchoTreeCharacter::Look(const FInputActionValue& Value)
-{
-	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
-
-	// route the input
-	DoLook(LookAxisVector.X, LookAxisVector.Y);
-}
+//void AEchoTreeCharacter::Look(const FInputActionValue& Value)
+//{
+//	// input is a Vector2D
+//	FVector2D LookAxisVector = Value.Get<FVector2D>();
+//
+//	// route the input
+//	DoLook(LookAxisVector.X, LookAxisVector.Y);
+//}
 
 void AEchoTreeCharacter::DoMove(float Right, float Forward)
 {
@@ -96,7 +85,8 @@ void AEchoTreeCharacter::DoMove(float Right, float Forward)
 	{
 		// find out which way is forward
 		const FRotator Rotation = GetController()->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
+		//const FRotator YawRotation(0, Rotation.Yaw, 0);
+		const FRotator YawRotation(0, 0, 0);
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
@@ -110,15 +100,15 @@ void AEchoTreeCharacter::DoMove(float Right, float Forward)
 	}
 }
 
-void AEchoTreeCharacter::DoLook(float Yaw, float Pitch)
-{
-	if (GetController() != nullptr)
-	{
-		// add yaw and pitch input to controller
-		AddControllerYawInput(Yaw);
-		AddControllerPitchInput(Pitch);
-	}
-}
+//void AEchoTreeCharacter::DoLook(float Yaw, float Pitch)
+//{
+//	if (GetController() != nullptr)
+//	{
+//		// add yaw and pitch input to controller
+//		AddControllerYawInput(Yaw);
+//		AddControllerPitchInput(Pitch);
+//	}
+//}
 
 void AEchoTreeCharacter::DoJumpStart()
 {
